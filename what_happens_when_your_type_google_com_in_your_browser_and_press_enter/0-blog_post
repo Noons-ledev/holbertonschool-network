@@ -1,0 +1,115 @@
+From DNS resolution to displaying a web page, here's what really happens when you visit http://www.google.com.
+
+🔍 1. DNS Resolution – From URL to IP Address
+The first thing your browser does is resolve the domain name to an IP address. Here's how:
+
+Check Local DNS Cache: The system first checks if the IP address is already cached.
+
+DNS Query: If not found, a DNS query is made.
+
+Resolution Process:
+
+The query hits a DNS resolver.
+
+The resolver contacts root servers and authoritative servers for google.com.
+
+It retrieves an IP address (e.g., 142.250.183.68), which is sent back to the browser.
+
+🔗 2. Establishing the TCP/IP Connection
+With the IP address in hand, your browser:
+
+Establishes a TCP connection using the TCP/IP protocol stack.
+
+Uses port 443 (default for HTTPS).
+
+Performs a 3-step handshake:
+
+nginx
+Copier
+Modifier
+SYN → SYN-ACK → ACK
+This process ensures the connection is reliable and error-free.
+
+🔥 3. Navigating Firewalls
+As network packets travel, they pass through multiple firewalls:
+
+Types: OS firewall, router, ISP firewall, server-side firewalls.
+
+Purpose: Filter out invalid or dangerous connections.
+
+Rule Matching: Only allow legitimate traffic, typically on port 443.
+
+🔐 4. Establishing a Secure HTTPS Connection (SSL/TLS)
+Since the URL uses HTTPS, the browser initiates a TLS handshake:
+
+Server sends an SSL certificate (e.g., from Let's Encrypt or DigiCert).
+
+Browser validates the certificate:
+
+Is it expired?
+
+Signed by a trusted CA?
+
+Matches the domain?
+
+A session key is exchanged to enable encrypted communication.
+
+🧭 5. Load Balancer in Action
+At Google (and many modern architectures), a load balancer:
+
+Distributes traffic to available servers to avoid overload.
+
+Ensures high availability and scalability.
+
+Optionally handles TLS termination (decrypts HTTPS before forwarding internally).
+
+🖥️ 6. Request Handling by Web Server
+The chosen web server (like NGINX or Apache):
+
+Parses the HTTP request.
+
+Serves static files directly (HTML, CSS, JS, images).
+
+For dynamic requests, forwards to an application server using protocols like FastCGI or HTTP.
+
+⚙️ 7. Executing Business Logic on Application Server
+Here lies the core logic:
+
+Parses queries (e.g., Google search terms).
+
+Applies algorithms (ranking, filtering).
+
+Checks user session and preferences.
+
+Queries internal APIs, caches, or microservices.
+
+🗃️ 8. Querying the Database
+The app server interacts with databases for persistent data:
+
+NoSQL databases: e.g., Google Bigtable, Spanner.
+
+Relational databases: e.g., MySQL, PostgreSQL.
+
+The retrieved data is processed and formatted for response.
+
+📤 9. Sending Response to the Browser
+The application server returns the result to the web server.
+
+The response (HTML, JSON, etc.) passes through:
+
+pgsql
+Copier
+Modifier
+Web Server → Load Balancer → Encrypted HTTPS connection → Client
+The browser renders the page:
+
+Parses HTML.
+
+Loads assets (CSS, JS, images).
+
+Renders the UI.
+
+💡 Conclusion
+A seemingly simple action — entering a URL — triggers a complex orchestration of protocols, servers, security layers, and business logic.
+
+Mastering this journey from browser to backend is essential for any web developer or systems engineer.
